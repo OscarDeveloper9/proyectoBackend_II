@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "username": "juano",
+    "email": "juan@mail.com",
+    "password": "$2a$10$R.3xQ58kEtTIx5FDcMiBruvmpRwk.nwBnPah3GqA2CTjKV7gk0qhi",
+    "role": "user"
+  },
+  {
+    "id": 2,
+    "username": "Paco",
+    "email": "Paco@mail.com",
+    "password": "$2a$10$dXVORF3hs7VS9Fuj2jeElOaLWsMtaAQHWx5NRYuwclKKwdcYZC2GC",
+    "role": "admin"
+  },
+  {
+    "id": 3,
+    "username": "Picolo",
+    "email": "Picolo@example.com",
+    "password": "$2a$10$8R0L7q78CGb3MgYkYZfIQOIvWXFTeVLzD5RG3Lsg.kBsOcA/P5IWS",
+    "role": "user"
+  },
+  {
+    "id": 4,
+    "username": "usuario1",
+    "email": "usuario1@example.com",
+    "password": "$2a$10$Po.ph7jguUOV1UISCdbxgeTPMHZkFutgkZuXjrvmMWJuCsQkbxl/.",
+    "role": "user"
+  },
+  {
+    "id": 5,
+    "username": "pipo",
+    "email": "pipo@example.com",
+    "password": "$2a$10$DZWjN1O6Dl.s82Hh0pQe/.6zZ72rxwicLiXWzEQbkbuLspBroUNja",
+    "role": "usuario"
+  },
+  {
+    "id": 6,
+    "username": "admin",
+    "email": "admin@example.com",
+    "password": "$2a$10$nb0/nqWluSGpiCUIlGo4gu5wvVeqxMzl7lS6EVaOMOg9YuoSbzm.q",
+    "role": "admin"
+  }
+]
