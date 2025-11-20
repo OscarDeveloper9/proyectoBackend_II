@@ -11,19 +11,25 @@ export class PasswordResetService {
     const user = await userRepo.getByEmail(email);
     if (!user) throw new Error("Usuario no encontrado");
 
+    // JWT puro, expiración en segundos
     const resetToken = jwt.sign({ id: user._id }, config.jwtSecret, {
-      expiresIn: config.resetPasswordExpiration,
+      expiresIn: `${config.resetPasswordExpiration}s`,
     });
 
     const link = `${config.frontendURL}/reset-password?token=${resetToken}`;
 
+    // Guardamos token en DB solo para registro histórico (opcional)
     await userRepo.saveResetToken(
       user._id,
       resetToken,
       Date.now() + config.resetPasswordExpiration * 1000
     );
 
+    // Enviamos email
     await MailService.sendResetEmail(user.email, link);
+
+    // Para pruebas en Postman, devolvemos token en respuesta
+    return resetToken;
   }
 
   static async resetPassword(token, newPassword) {

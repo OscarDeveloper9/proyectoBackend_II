@@ -3,6 +3,7 @@ import { CartRepository } from "../repositories/cartRepository.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { config } from "../config/env.js";
+import { PasswordResetService } from "../services/passwordResetService.js";
 
 const userRepo = new UserRepository();
 const cartRepo = new CartRepository();
@@ -22,7 +23,6 @@ export class AuthController {
         role: role || "usuario",
       });
 
-      // Crear carrito automáticamente
       const cart = await cartRepo.create({ user: user._id, products: [] });
       user.cart = cart._id;
       await userRepo.update(user._id, { cart: cart._id });
@@ -82,6 +82,33 @@ export class AuthController {
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
+    }
+  }
+
+  static async forgotPassword(req, res) {
+    try {
+      const { email } = req.body;
+      const token = await PasswordResetService.requestReset(email);
+      res.json({
+        status: "success",
+        message: "Revisa tu email para restablecer la contraseña",
+        token, // Devuelto solo para pruebas en Postman
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  }
+
+  static async resetPassword(req, res) {
+    try {
+      const { token, newPassword } = req.body;
+      await PasswordResetService.resetPassword(token, newPassword);
+      res.json({
+        status: "success",
+        message: "Contraseña actualizada correctamente",
+      });
+    } catch (err) {
+      res.status(400).json({ error: err.message });
     }
   }
 }
