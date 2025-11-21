@@ -1,40 +1,52 @@
-import { CartRepository } from "../repositories/cartRepository.js";
-import { ProductRepository } from "../repositories/productRepository.js";
+// src/services/cartService.js
+import { CartDAO } from "../daos/cartDao.js";
+import { ProductDAO } from "../daos/productDao.js";
 
-const cartRepo = new CartRepository();
-const productRepo = new ProductRepository();
+const cartDAO = new CartDAO();
+const productDAO = new ProductDAO();
 
-export class CartService {
+export default class CartService {
   static async getCartByUser(userId) {
-    let cart = await cartRepo.getByUser(userId);
+    let cart = await cartDAO.getByUser(userId);
     if (!cart) {
-      cart = await cartRepo.create({ user: userId, products: [] });
+      cart = await cartDAO.create({ user: userId, products: [] });
     }
     return cart;
   }
 
   static async addProduct(userId, productId, quantity) {
-    const cart = await this.getCartByUser(userId);
-    const product = await productRepo.getById(productId);
+    if (!productId) throw new Error("Producto inválido");
+    if (!quantity || quantity <= 0) throw new Error("Cantidad inválida");
+
+    const product = await productDAO.getById(productId);
     if (!product) throw new Error("Producto no encontrado");
-    if (product.stock < quantity) throw new Error("Stock insuficiente");
+
+    let cart = await cartDAO.getByUser(userId);
+    if (!cart) cart = await cartDAO.create({ user: userId, products: [] });
 
     const existing = cart.products.find(
-      (p) => p.product._id.toString() === productId
+      (p) => p.product.toString() === productId.toString()
     );
-    if (existing) {
-      existing.quantity += quantity;
-    } else {
-      cart.products.push({ product: product._id, quantity });
-    }
-    return await cartRepo.update(cart._id, { products: cart.products });
+    if (existing) existing.quantity += quantity;
+    else cart.products.push({ product: productId, quantity });
+
+    return await cartDAO.update(cart._id, { products: cart.products });
   }
 
   static async removeProduct(userId, productId) {
-    const cart = await this.getCartByUser(userId);
+    let cart = await cartDAO.getByUser(userId);
+    if (!cart) throw new Error("Carrito no encontrado");
+
     cart.products = cart.products.filter(
-      (p) => p.product._id.toString() !== productId
+      (p) => p.product.toString() !== productId.toString()
     );
-    return await cartRepo.update(cart._id, { products: cart.products });
+    return await cartDAO.update(cart._id, { products: cart.products });
+  }
+
+  static async clearCart(userId) {
+    let cart = await cartDAO.getByUser(userId);
+    if (!cart) throw new Error("Carrito no encontrado");
+
+    return await cartDAO.update(cart._id, { products: [] });
   }
 }

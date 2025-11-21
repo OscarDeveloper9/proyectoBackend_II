@@ -17,9 +17,9 @@ export class PurchaseService {
     });
 
     const ticket = await ticketRepo.create({
-      codigo: generateCode(),
-      usuario: userId,
-      productos: purchasedProducts,
+      code: generateCode(),
+      user: userId,
+      products: purchasedProducts,
       total,
     });
 

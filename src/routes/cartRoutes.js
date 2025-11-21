@@ -1,5 +1,5 @@
 import express from "express";
-import { CartController } from "../controllers/cartController.js";
+import CartController from "../controllers/cartController.js";
 import {
   authMiddleware,
   roleMiddleware,

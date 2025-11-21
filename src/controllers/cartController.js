@@ -1,7 +1,7 @@
-import { CartService } from "../services/cartService.js";
+// src/controllers/cartController.js
+import CartService from "../services/cartService.js";
 
-export class CartController {
-  // Obtener carrito del usuario autenticado
+export default class CartController {
   static async getCart(req, res) {
     try {
       const cart = await CartService.getCartByUser(req.user._id);
@@ -11,7 +11,6 @@ export class CartController {
     }
   }
 
-  // Agregar producto al carrito
   static async addProduct(req, res) {
     try {
       const { productId, quantity } = req.body;
@@ -26,7 +25,6 @@ export class CartController {
     }
   }
 
-  // Quitar producto del carrito
   static async removeProduct(req, res) {
     try {
       const { productId } = req.body;
